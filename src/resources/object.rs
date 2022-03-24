@@ -179,6 +179,7 @@ impl Object {
         file: &[u8],
         filename: &str,
         mime_type: &str,
+        timeout: u64,
     ) -> crate::Result<Self> {
         use reqwest::header::{CONTENT_LENGTH, CONTENT_TYPE};
 
@@ -196,7 +197,7 @@ impl Object {
         let response = (GCS_HTTP_CLIENT)
             .post(url)
             .headers(headers)
-            .timeout(Duration::from_secs(30))
+            .timeout(Duration::from_secs(timeout))
             .body(file.to_owned())
             .send()
             .await?;
