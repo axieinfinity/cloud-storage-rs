@@ -81,7 +81,7 @@
 //! # Ok(())
 //! # }
 //! ```
-#![forbid(unsafe_code, missing_docs)]
+#![forbid(unsafe_code)]
 
 /// Contains objects as represented by Google, to be used for serialization and deserialization.
 mod error;

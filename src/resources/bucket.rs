@@ -6,6 +6,7 @@ use crate::resources::default_object_access_control::{
     DefaultObjectAccessControl, NewDefaultObjectAccessControl,
 };
 pub use crate::resources::location::*;
+use lazy_static::lazy_static;
 
 /// The Buckets resource represents a
 /// [bucket](https://cloud.google.com/storage/docs/key-terms#buckets) in Google Cloud Storage. There
@@ -539,6 +540,9 @@ pub struct TestIamPermission {
     /// supported permissions.
     permissions: Vec<String>,
 }
+lazy_static! {
+    pub static ref HTTP_CLIENT: reqwest::Client = reqwest::Client::new();
+}
 
 impl Bucket {
     /// Creates a new `Bucket`. There are many options that you can provide for creating a new
@@ -566,7 +570,7 @@ impl Bucket {
         let url = format!("{}/b/", crate::BASE_URL);
         let project = crate::SERVICE_ACCOUNT.project_id.clone();
         let query = [("project", project)];
-        let result: GoogleResponse<Self> = reqwest::Client::new()
+        let result: GoogleResponse<Self> = (HTTP_CLIENT)
             .post(&url)
             .headers(crate::get_headers().await?)
             .query(&query)
