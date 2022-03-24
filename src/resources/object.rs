@@ -1,3 +1,4 @@
+use crate::bucket::GCS_HTTP_CLIENT;
 use crate::error::{Error, GoogleResponse};
 pub use crate::resources::bucket::Owner;
 use crate::resources::common::ListResponse;
@@ -191,7 +192,7 @@ impl Object {
         let mut headers = crate::get_headers().await?;
         headers.insert(CONTENT_TYPE, mime_type.to_string().parse()?);
         headers.insert(CONTENT_LENGTH, file.len().to_string().parse()?);
-        let response = reqwest::Client::new()
+        let response = (GCS_HTTP_CLIENT)
             .post(url)
             .headers(headers)
             .body(file.to_owned())
@@ -512,7 +513,7 @@ impl Object {
     /// use cloud_storage::Object;
     ///
     /// let stream = Object::download_streamed("my_bucket", "path/to/my/file.png").await?;
-    /// for 
+    /// for
     /// # Ok(())
     /// # }
     /// ```
@@ -1067,7 +1068,6 @@ mod tests {
         }
         // let data = data.next().await.flat_map(|part| part.into_iter()).collect();
         assert_eq!(data, content);
-
 
         Ok(())
     }

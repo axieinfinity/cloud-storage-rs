@@ -541,7 +541,7 @@ pub struct TestIamPermission {
     permissions: Vec<String>,
 }
 lazy_static! {
-    pub static ref HTTP_CLIENT: reqwest::Client = reqwest::Client::new();
+    pub static ref GCS_HTTP_CLIENT: reqwest::Client = reqwest::Client::new();
 }
 
 impl Bucket {
@@ -570,7 +570,7 @@ impl Bucket {
         let url = format!("{}/b/", crate::BASE_URL);
         let project = crate::SERVICE_ACCOUNT.project_id.clone();
         let query = [("project", project)];
-        let result: GoogleResponse<Self> = (HTTP_CLIENT)
+        let result: GoogleResponse<Self> = (GCS_HTTP_CLIENT)
             .post(&url)
             .headers(crate::get_headers().await?)
             .query(&query)
