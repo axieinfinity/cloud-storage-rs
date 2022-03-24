@@ -5,6 +5,7 @@ use crate::resources::common::ListResponse;
 use crate::resources::object_access_control::ObjectAccessControl;
 use futures::{stream, Stream, TryStream};
 use percent_encoding::{utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
+use std::time::Duration;
 
 /// A resource representing a file in Google Cloud Storage.
 #[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
@@ -195,6 +196,7 @@ impl Object {
         let response = (GCS_HTTP_CLIENT)
             .post(url)
             .headers(headers)
+            .timeout(Duration::from_secs(30))
             .body(file.to_owned())
             .send()
             .await?;
